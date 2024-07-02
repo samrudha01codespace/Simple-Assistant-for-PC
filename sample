@@ -1,0 +1,120 @@
+from pytube import YouTube
+from pytube import Search
+import os
+
+# List of Hindi wedding songs
+songs = [
+    "Mangalashtak - Traditional",
+    "Jau Dya Na Ghari - Sairat",
+    "Morya Morya - Umesh Kamat, Amruta Subhash",
+    "Apsara Aali - Natarang",
+    "Zingaat - Sairat",
+    "Lallati Bhandar - Jaundya Na Balasaheb",
+    "Jiv Rangala - Jogwa",
+    "Kombdi Palali - Jatra",
+    "Dhaga Dhaga - Timepass 2",
+    "Mala Jau Dya Na Ghari - Sairat",
+    "Ti Sadhya Kay Karte - Ti Saddhya Kay Karte",
+    "Majha Hoshil Ka - Sukh Mhanje Nakki Kay Asta",
+    "Radha Hi Bawari - Timepass",
+    "Yad Lagla - Sairat",
+    "Aga Bai Arrechya - Aga Bai Arrechya",
+    "Deva Tujhya Gabharyala - Katyar Kaljat Ghusali",
+    "Katyar Kaljat Ghusali - Katyar Kaljat Ghusali",
+    "Sairat Zaala Ji - Sairat",
+    "Parikatha - Mitwaa",
+    "O Ki Re Mana - Mumbai Pune Mumbai",
+    "Saajana - Saajana",
+    "Hi Poli Saajuk Tupatali - Aga Bai Arrechya",
+    "Wajle Ki Bara - Natarang",
+    "Dhad Dhad - Lai Bhaari",
+    "Mala Ved Lagale - Timepass",
+    "Gulabachi Kali - Priyatama",
+    "Jejuricha Raja - Mala Jai Ramachandra",
+    "Galavar Khali - Sairat",
+    "Saang Na Re Mana - Timepass 2",
+    "Manaachyaa Dhundit - Ti Saddhya Kay Karte",
+    "Kiti Sangaychay Mala - Double Seat",
+    "Apsara Ali - Natarang",
+    "TikTik Vajate Dokyat - Dholki",
+    "Morya Morya - Umesh Kamat",
+    "Sang Na Re - Timepass 2",
+    "Shubharambh - Ajay-Atul",
+    "Mann Udhan Varyache - Ajay-Atul",
+    "Bai Ga Bai Ga - Ajay-Atul",
+    "Bai Wadyavar Ya - Zee Music",
+    "Ti Saddhya Kay Karte - Avadhoot Gupte",
+    "Dhan Te Nan - Vishal Dadlani",
+    "Gajra Marathe - Satyajeet Padhye",
+    "Ek Dantay Vakratunday - Avadhoot Gupte",
+    "Gajanana - Satyajeet Padhye",
+    "Ti Majhi Girlfriend - Sonalee Kulkarni",
+    "Ved Laglay - Avadhoot Gupte",
+    "Kasa Kay Patil Bara Haat - Sonalee Kulkarni",
+    "Chal Chal Bhagal - Satyajeet Padhye",
+    "Dhinchak - Vishal Dadlani",
+    "Dolbywala - Avadhoot Gupte",
+    "Dolbywala - Shalmali Kholgade",
+    "Govyachya Kinaryav - Avadhoot Gupte",
+    "Havay Yeu De - Satyajeet Padhye",
+    "Ye Go Ye Ye Maina - Ajay-Atul",
+    "Hi Poli Saajuk Tupatali - Avadhoot Gupte",
+    "Kaal Maat Premacha - Sonalee Kulkarni",
+    "Reshimgathi - Avadhoot Gupte",
+    "Aai Shappath - Shalmali Kholgade",
+    "Dol Doltay Wajle - Avadhoot Gupte",
+    "Goi Gondhal - Vishal Dadlani",
+    "Golmaal Golmaal - Ajay-Atul",
+    "Ye Re Ye Re Paisa - Avadhoot Gupte",
+    "Ti Saddhya Kay Karte - Shalmali Kholgade",
+    "Ghayal - Avadhoot Gupte",
+    "Tuzhi Mazhi Jodi - Vishal Dadlani",
+    "Premachi Gani - Sonalee Kulkarni",
+    "Zing Zing Zingat - Satyajeet Padhye",
+    "Govyachya Kinaryav - Avadhoot Gupte",
+    "Saath De Tu Mala - Ajay-Atul",
+    "Tuzya Vina - Vishal Dadlani",
+    "Jiv Rangala - Ajay-Atul",
+    "Reshimgathi - Satyajeet Padhye",
+    "Apsara Aali - Sonalee Kulkarni",
+    "Dhan Te Nan - Avadhoot Gupte",
+    "Jau Dya Na Ghari - Ajay-Atul",
+    "Bai Wadyavar Ya - Satyajeet Padhye",
+    "Hi Poli Saajuk Tupatali - Shalmali Kholgade",
+    "Gajanana - Avadhoot Gupte",
+    "Govyachya Kinaryav - Vishal Dadlani",
+    "Reshimgathi - Shalmali Kholgade",
+    "Ti Saddhya Kay Karte - Sonalee Kulkarni",
+    "Premachi Gani - Avadhoot Gupte",
+    "Tuzya Vina - Ajay-Atul",
+    "Zing Zing Zingat - Sonalee Kulkarni",
+    "Govyachya Kinaryav - Shalmali Kholgade",
+    "Saath De Tu Mala - Vishal Dadlani",
+    "Premachi Gani - Ajay-Atul",
+    "Jiv Rangala - Vishal Dadlani",
+    "Apsara Aali - Satyajeet Padhye",
+    "Dhan Te Nan - Shalmali Kholgade",
+    "Hi Poli Saajuk Tupatali - Sonalee Kulkarni",
+    "Reshimgathi - Avadhoot Gupte"
+]
+
+
+# Directory to save the downloaded songs
+download_dir = "downloaded_songs_marathi"
+os.makedirs(download_dir, exist_ok=True)
+
+def download_song(song_name):
+    search = Search(song_name)
+    results = search.results
+    if results:
+        video = results[0]
+        print(f"Downloading {song_name}...")
+        video.streams.filter(only_audio=True).first().download(output_path=download_dir)
+        print(f"Downloaded: {song_name}")
+    else:
+        print(f"Song not found: {song_name}")
+
+for song in songs:
+    download_song(song)
+
+print("All songs downloaded.")

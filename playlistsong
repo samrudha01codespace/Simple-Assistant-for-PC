@@ -1,0 +1,47 @@
+from pytube import Playlist, YouTube
+import os
+
+
+# Function to download YouTube video as audio
+def download_audio(video_url, output_path):
+    try:
+        yt = YouTube(video_url)
+        audio_stream = yt.streams.filter(only_audio=True).first()
+        downloaded_file = audio_stream.download(output_path=output_path)
+        base, ext = os.path.splitext(downloaded_file)
+        new_file = base + '.mp3'
+        os.rename(downloaded_file, new_file)
+        print(f"Downloaded and converted: {new_file}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+# Function to download an entire playlist
+def download_playlist(playlist_url, output_directory):
+    try:
+        playlist = Playlist(playlist_url)
+        for video_url in playlist.video_urls:
+            download_audio(video_url, output_directory)
+    except Exception as e:
+        print(f"An error occurred while downloading the playlist: {e}")
+
+
+# List of YouTube playlist URLs representing albums (add more URLs as needed)
+playlist_urls = [
+
+    "https://www.youtube.com/playlist?list=PLx-w3AV6zlXc9_Lb7XCu9pUqKwx5Ks-gT",
+    "https://www.youtube.com/playlist?list=PL0Z67tlyTaWolCDZ0EWJUoFM8iEFQ4_Im"
+
+]
+
+# Output directory
+output_directory = "wedding_albums"
+
+# Create output directory if it doesn't exist
+if not os.path.exists(output_directory):
+    os.makedirs(output_directory)
+
+# Download each playlist (album)
+for playlist_url in playlist_urls:
+    print(f"Downloading playlist: {playlist_url}")
+    download_playlist(playlist_url, output_directory)
