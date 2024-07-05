@@ -114,6 +114,7 @@ def play_audio(text):
 def get_voice_input():
     recognizer = sr.Recognizer()
     with sr.Microphone() as source:
+        recognizer.adjust_for_ambient_noise(source)
         print("Please speak your query...")
         audio = recognizer.listen(source)
         try:
@@ -125,6 +126,13 @@ def get_voice_input():
         except sr.RequestError:
             print("Could not request results; check your network connection.")
 
+def wake_word_listener():
+    while True:
+        print("Listening for wake word...")
+        query = get_voice_input()
+        if query and "jarvis" in query:
+            play_audio("Yes Sir")
+            return
 
 # Function to recognize faces using OpenCV
 def recognize_faces():
@@ -143,6 +151,7 @@ def recognize_faces():
     recognized_name = None
 
     while True:
+        print(cv2.__version__)
         ret, frame = video_capture.read()
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
@@ -162,22 +171,22 @@ def recognize_faces():
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 face_file = os.path.join(face_dir, f"face_{len(os.listdir(face_dir)) + 1}.jpg")
                 cv2.imwrite(face_file, face_image)
-
                 play_audio("Please tell me the name of this person.")
                 person_name = get_voice_input()
                 if person_name:
-                    person_name = person_name.replace(" ", "_")
+                    person_name = person_name.replace(" ", "_")  # Replace spaces with underscores
                     os.rename(face_file, os.path.join(face_dir, f"{person_name}.jpg"))
                     known_faces[person_name] = face_image
                     with open("known_faces.pkl", "wb") as f:
                         pickle.dump(known_faces, f)
                     play_audio(f"Face saved as {person_name}.")
                     recognized_name = person_name
-                    break
                 else:
                     play_audio("Failed to get the person's name. Please try again.")
                     print("Failed to get the person's name. Please try again.")
-                    os.remove(face_file)
+                    os.remove(face_file)  # Remove the file if no name is provided
+            if recognized_name:
+                break
 
         cv2.imshow('Video', frame)
 
@@ -187,11 +196,7 @@ def recognize_faces():
     video_capture.release()
     cv2.destroyAllWindows()
 
-
-def verify_password(input_password):
-    correct_password = "8124"  # Replace with your actual password
-    return input_password == correct_password
-
+    return recognized_name
 
 def create_document(user_input, response):
     document = Document()
@@ -378,8 +383,8 @@ def send_email(recipient, subject, body):
     from email.mime.multipart import MIMEMultipart
     from email.mime.text import MIMEText
 
-    sender_email = "your_email@gmail.com"
-    sender_password = "your_password"
+    sender_email = "darkcamperyt007@gmail.com"
+    sender_password = "samrudha@125412"
 
     msg = MIMEMultipart()
     msg['From'] = sender_email
@@ -517,18 +522,6 @@ def handle_command(command):
     elif "log off" in command:
         os.system("shutdown /l")  # Log off user
         return "Logging off the user."
-
-        return "I'm sorry, I couldn't understand that command."
-
-    elif "study notes" in command:
-        url = "https://www.studymedia.in/fe/notes/"
-        webbrowser.open(url)
-        if "question papers" in command:
-            url = "https://www.studymedia.in/fe/pyqs/"
-            webbrowser.open(url)
-    elif "study media" in command:
-        url = "https://www.studymedia.in"
-        webbrowser.open(url)
     elif "images of Earth" in command:
         return liveimagesofEarth()
     elif "exit" in command:
@@ -657,7 +650,7 @@ chat_session = model.start_chat(
 def main():
     recognized_name = recognize_faces()
     if recognized_name:
-        play_audio(f"Hello, {recognized_name}. How can I assist you today?")
+        play_audio(f"Hello, {recognized_name}. I am a simple assistant made by samrudha. How can i assist you today?")
     else:
         play_audio("Face recognition failed. How can I assist you today?")
 
