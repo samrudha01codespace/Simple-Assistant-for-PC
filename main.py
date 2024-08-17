@@ -22,19 +22,35 @@ from docx import Document  # Used for creating, reading, and editing Microsoft W
 
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
+
+# Load pre-trained model and tokenizer
+model_name = "gpt2"
+tokenizer = GPT2Tokenizer.from_pretrained(model_name)
+model = GPT2LMHeadModel.from_pretrained(model_name)
+
+
+def generate_response(prompt):
+    inputs = tokenizer.encode(prompt, return_tensors="pt")
+    outputs = model.generate(inputs, max_length=150, num_return_sequences=1, no_repeat_ngram_size=2)
+    response = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return response
+
+
 # Initialize pyttsx3 engine for TTS
 engine = pyttsx3.init()
 
-NEWS_API_KEY = "Write Your Api key"
-ORS_API_KEY = "Write Your Api key" # Replace with your actual OpenRouteService API key
-GOOGLE_API_KEY = "Write Your Api key"  # Replace with your actual Google API key
-CSE_ID = "Write Your Api key"
-WEATHER_API_KEY = "Write Your Api key"  # Add your OpenWeatherMap API key
-NASA_API_KEY = "Write Your Api key"
+NEWS_API_KEY = "1512de5b85bf4520b1756ff1c26011b4"
+ORS_API_KEY = "5b3ce3597851110001cf62483e5d371a78804b1eb1ef23c55bb7a1ef"  # Replace with your actual OpenRouteService API key
+GOOGLE_API_KEY = "AIzaSyC0384Au6Ry3kKngRIx4twv7ixOye5ifI4"  # Replace with your actual Google API key
+CSE_ID = "9204a16ddb91246f5"
+WEATHER_API_KEY = "4a4185167871ab79eb83fd5552643ded"  # Add your OpenWeatherMap API key
+NASA_API_KEY = "jRw3T0VgTbzQYiu2Bd5YP8RCosAQiED1ugByfDAA"
 
 data_folder = "data"  # Path to your "Data" folder
 
-#to play music add the folder named "data" in that add another folder named "music" in that add musics
+
+# to play music add the folder named "data" in that add another folder named "music" in that add musics
 def play_music(partial_name):
     pygame.init()
     pygame.mixer.init()
@@ -103,11 +119,9 @@ def play_music(partial_name):
 def play_audio(text):
     engine.say(text)
     engine.runAndWait()
-    
+
 
 # Function to locate realtime location
-
-
 
 
 # Function to get voice input
@@ -126,6 +140,7 @@ def get_voice_input():
         except sr.RequestError:
             print("Could not request results; check your network connection.")
 
+
 def wake_word_listener():
     while True:
         print("Listening for wake word...")
@@ -134,7 +149,8 @@ def wake_word_listener():
             play_audio("Yes Sir")
             return
 
-# Function to recognize faces using OpenCV
+
+# Function to recognize fa  ces using OpenCV
 def recognize_faces():
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     video_capture = cv2.VideoCapture(0)
@@ -197,6 +213,7 @@ def recognize_faces():
     cv2.destroyAllWindows()
 
     return recognized_name
+
 
 def create_document(user_input, response):
     document = Document()
@@ -513,7 +530,7 @@ def handle_command(command):
 
     if "control PC" in command:
         return "Sure, what would you like to do with your PC?"
-    elif "shut down" in command:
+    elif "shutdown" in command:
         os.system("shutdown /s /t 1")  # Shutdown PC
         return "Shutting down the PC."
     elif "restart" in command:
@@ -581,8 +598,8 @@ def handle_command(command):
 
     elif "set alarm of " in command:
         alarm = command.replace("set alarm of", "").strip
-        
-        
+
+
 
     elif "say jokes" in command:
         return tell_joke()
@@ -603,7 +620,7 @@ def handle_command(command):
 
 
 # Ensure the environment variable AI_API_KEY is set with your API key
-api_key = ""
+api_key = "AIzaSyBIOrhak4mBQN-FOPfM2Emhu9YOhvaEYq8"
 if not api_key:
     raise ValueError("API key not found. Please set the AI_API_KEY environment variable.")
 
