@@ -1,7 +1,7 @@
 import requests
 
 # Replace 'your_api_key' with your actual API key from HERE.com
-api_key = '_Pq62hWW3mFAI3II-3yoT0l8D8KvnQvALIkhAd4e86s'
+api_key = ''
 
 # Example endpoint for the HERE Geocoding API
 base_url = 'https://geocode.search.hereapi.com/v1/geocode'
