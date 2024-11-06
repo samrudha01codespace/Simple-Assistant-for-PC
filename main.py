@@ -40,12 +40,12 @@ def generate_response(prompt):
 # Initialize pyttsx3 engine for TTS
 engine = pyttsx3.init()
 
-NEWS_API_KEY = "1512de5b85bf4520b1756ff1c26011b4"
-ORS_API_KEY = "5b3ce3597851110001cf62483e5d371a78804b1eb1ef23c55bb7a1ef"  # Replace with your actual OpenRouteService API key
-GOOGLE_API_KEY = "AIzaSyC0384Au6Ry3kKngRIx4twv7ixOye5ifI4"  # Replace with your actual Google API key
-CSE_ID = "9204a16ddb91246f5"
-WEATHER_API_KEY = "4a4185167871ab79eb83fd5552643ded"  # Add your OpenWeatherMap API key
-NASA_API_KEY = "jRw3T0VgTbzQYiu2Bd5YP8RCosAQiED1ugByfDAA"
+NEWS_API_KEY = ""
+ORS_API_KEY = ""  # Replace with your actual OpenRouteService API key
+GOOGLE_API_KEY = ""  # Replace with your actual Google API key
+CSE_ID = ""
+WEATHER_API_KEY = ""  # Add your OpenWeatherMap API key
+NASA_API_KEY = ""
 
 data_folder = "data"  # Path to your "Data" folder
 
