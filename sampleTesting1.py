@@ -1,7 +1,7 @@
 import requests
 
 # Replace 'your_api_key' with your actual API key from HERE.com
-api_key = '_Pq62hWW3mFAI3II-3yoT0l8D8KvnQvALIkhAd4e86s'
+api_key = ''
 
 # Base URL for the HERE Routing API
 base_url = 'https://router.hereapi.com/v8/routes'
