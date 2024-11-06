@@ -620,7 +620,7 @@ def handle_command(command):
 
 
 # Ensure the environment variable AI_API_KEY is set with your API key
-api_key = "AIzaSyBIOrhak4mBQN-FOPfM2Emhu9YOhvaEYq8"
+api_key = ""
 if not api_key:
     raise ValueError("API key not found. Please set the AI_API_KEY environment variable.")
 
